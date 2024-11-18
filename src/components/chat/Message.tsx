@@ -1,0 +1,58 @@
+import React from 'react';
+import Avatar from '../Avatar';
+import { fromNow } from '@/helpers/dayjs';
+import Image from 'next/image';
+
+interface MessageProps {
+  isSender: boolean;
+  messageText: string | null;
+  messageImage: string | null;
+  receiverName: string;
+  receiverImage: string;
+  senderImage: string | null;
+  time: Date;
+}
+
+const Message = ({
+  isSender,
+  messageText,
+  messageImage,
+  receiverName,
+  receiverImage,
+  senderImage,
+  time,
+}: MessageProps) => {
+  return (
+    <div className={`flex w-full items-start gap-3 ${isSender ? 'flex-row-reverse' : ''}`}>
+      <div>
+        <Avatar src={senderImage && isSender ? senderImage : receiverImage} />
+      </div>
+      <div className='flex flex-col items-start justify-center'>
+        <div className='flex items-center gap-2 mb-2 text-sm'>
+          <span className='font-medium'>{isSender ? 'You' : receiverName}</span>
+          <span className='text-xs text-gray-500 opacity-80'>{fromNow(time)}</span>
+        </div>
+        {messageImage && (
+          <div
+            className={`overflow-hidden rounded-md mx-[0.6rem] max-w-[80%] 
+          ${isSender ? 'rounded-tr-none self-end' : 'rounded-tl-none self-start'}
+          `}
+          >
+            <Image src={messageImage} width={300} height={300} alt='' />
+          </div>
+        )}
+        {messageText && (
+          <div
+            className={`p-2 break-all text-white rounded-lg 
+            ${isSender ? 'bg-slate-500 rounded-tr-none self-end' : 'bg-gray-400 rounded-tl-none self-start'}
+            `}
+          >
+            <p>{messageText}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Message;
